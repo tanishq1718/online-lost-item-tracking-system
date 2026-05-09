@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Items - OLITS</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            font-family: 'Outfit', 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .navbar {
+            background: #1a1a2e;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar-brand {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand span {
+            color: #00d4ff;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-links img {
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #00d4ff;
+        }
+
+        .exit-btn {
+            background: #ff4757;
+            padding: 8px 20px !important;
+            border-radius: 5px;
+            font-weight: 600;
+        }
+
+        .exit-btn:hover {
+            background: #ff3838;
+            color: white !important;
+        }
+
+        .main {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .header-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            margin-bottom: 25px;
+        }
+
+        .header-card h2 {
+            color: var(--text-color);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .header-card p {
+            color: var(--secondary-text);
+            font-size: 1.1rem;
+            margin-bottom: 0;
+        }
+
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .filter-pill {
+            background: var(--card-bg);
+            color: var(--text-color);
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .filter-pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .filter-pill.active {
+            background: #4a65ff;
+            /* Match the active pill in layout */
+            color: white;
+        }
+
+
+
+        .items-section {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            transition: all 0.4s ease;
+        }
+
+        .items-section h3 {
+            color: var(--text-color);
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--input-border);
+            padding-bottom: 10px;
+        }
+
+        .placeholder {
+            color: var(--secondary-text);
+            font-style: italic;
+            text-align: center;
+            padding: 30px 20px;
+            background: var(--bg-color);
+            border-radius: 8px;
+        }
+
+        .item-card {
+            background: var(--bg-color);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 5px solid #4a65ff;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Unified item card border colors handled via inline style now */
+
+        .item-card:hover {
+            background: var(--card-bg);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transform: translateX(5px);
+        }
+
+        .item-card h4 {
+            color: var(--text-color);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            text-transform: capitalize;
+        }
+
+        .item-card p {
+            color: var(--secondary-text);
+            margin: 6px 0;
+            font-size: 0.95rem;
+        }
+
+        .item-card strong {
+            color: var(--text-color);
+        }
+
+        /* Update Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 10000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+
+        .modal-body label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .modal-body input, .modal-body select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid var(--input-border);
+            background: var(--bg-color);
+            color: var(--text-color);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-save {
+            background: #2ed573;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .btn-cancel {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            flex: 1;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <div class="navbar-brand">
+            <img src="mmu_logo.png" alt=""
+                style="height: 50px; margin-right: 15px; background: rgba(255, 255, 255, 0.9); padding: 4px; border-radius: 8px;">
+            <div style="color: white; font-weight: bold;">OLITS <span style="font-weight: normal; font-size: 0.9rem; margin-left:10px;">View Base</span></div>
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="help.html">Help/FAQ</a>
+            <div class="theme-switch-wrapper">
+                <label class="theme-switch" for="checkbox">
+                    <input type="checkbox" id="checkbox" />
+                    <div class="slider round"></div>
+                </label>
+            </div>
+            <a href="index.html" class="exit-btn" onclick="if(!confirm('Exit to home?')) return false;">🚪 Exit</a>
+        </div>
+    </div>
+
+    <div class="main">
+
+        <div class="header-card">
+            <h2>🔍 Items Database</h2>
+            <p>Browse reported lost and found items on campus.</p>
+        </div>
+
+        <!-- Search and Filter Bar -->
+        <div class="search-bar-container" style="background: var(--card-bg); padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 25px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <input type="text" id="searchInput" placeholder="Search by name..." style="flex: 2; min-width: 150px; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+            <div style="display: flex; gap: 10px; align-items: center; flex: 2; min-width: 320px;">
+                <label style="margin:0; font-size: 0.8rem; color:#888;">From:</label>
+                <input type="date" id="dateFrom" style="padding: 8px; border: 1px solid #ddd; border-radius: 5px; font-size: 0.9rem; flex: 1;">
+                <label style="margin:0; font-size: 0.8rem; color:#888;">To:</label>
+                <input type="date" id="dateTo" style="padding: 8px; border: 1px solid #ddd; border-radius: 5px; font-size: 0.9rem; flex: 1;">
+            </div>
+            <select id="filterCategory" style="padding: 10px; border: 1px solid var(--input-border); background: var(--bg-color); color: var(--text-color); border-radius: 8px; font-size: 0.9rem; min-width: 140px;">
+                <option value="">All Categories</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Documents">Documents/IDs</option>
+                <option value="Stationery">Stationery</option>
+                <option value="Clothing">Clothing/Accessories</option>
+                <option value="Other">Other</option>
+            </select>
+            <select id="filterLocation" style="padding: 10px; border: 1px solid var(--input-border); background: var(--bg-color); color: var(--text-color); border-radius: 8px; font-size: 0.9rem; min-width: 160px;" onchange="performSearch()">
+                <option value="">All Locations</option>
+                <option value="Engineering Block 1">Engineering Block 1</option>
+                <option value="Engineering Block 3">Engineering Block 3</option>
+                <option value="Medical College">Medical College</option>
+                <option value="Dental College">Dental College</option>
+                <option value="Central Library">Central Library</option>
+                <option value="Cafeteria/Food Court">Cafeteria/Food Court</option>
+                <option value="Hostel Area">Hostel Area</option>
+                <option value="MCA & BCA Department">MCA & BCA Department</option>
+                <option value="Pharmacy College">Pharmacy College</option>
+                <option value="Agriculture Department">Agriculture Department</option>
+                <option value="Law Department">Law Department</option>
+                <option value="Admin Block">Admin Block</option>
+                <option value="Other">Other Area</option>
+            </select>
+            <select id="sortItems" style="padding: 10px; border: 1px solid var(--input-border); background: var(--bg-color); color: var(--text-color); border-radius: 8px; font-size: 0.9rem;" onchange="performSearch()">
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="name">Name (A-Z)</option>
+                <option value="category">Category</option>
+            </select>
+            <button onclick="clearAllFilters()" style="background: #f1f2f6; color: #333; border: 1px solid #ddd; padding: 10px 15px; border-radius: 8px; font-weight: 500; cursor: pointer; transition: all 0.3s ease;">🧹 Clear All</button>
+            <button onclick="performSearch()" style="background: #4a65ff; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">Search</button>
+        </div>
+
+        <!-- Filter Pills -->
+        <div class="filter-container">
+            <button class="filter-pill active" onclick="applyFilter('all', this)">All Items</button>
+            <button class="filter-pill" onclick="applyFilter('lost', this)">Lost</button>
+            <button class="filter-pill" onclick="applyFilter('found', this)">Found</button>
+            <button class="filter-pill" style="background: #ffa502; color: white;" onclick="viewMyReports()">👤 My Reports</button>
+        </div>
+
+
+
+        <!-- Sections -->
+        <div id="unified-section" class="items-section">
+            <h3 id="section-title">📦 All Items</h3>
+            <div id="unified-items">
+                <!-- Shimmer Skeleton Loaders (US21) -->
+                <div class="skeleton-container">
+                    <div class="skeleton-card shimmer"></div>
+                    <div class="skeleton-card shimmer"></div>
+                    <div class="skeleton-card shimmer"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Update Modal -->
+    <div id="updateModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="updateModalTitle">Update Item Details</h3>
+                <span style="font-size: 1.5rem; cursor: pointer; color: #888;" onclick="closeUpdateModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="update-item-id">
+                <input type="hidden" id="update-item-type">
+
+                <label>Item Name</label>
+                <input type="text" id="update-itemName">
+
+                <label>Category</label>
+                <select id="update-category">
+                    <option value="Electronics">Electronics</option>
+                    <option value="Documents">Documents/IDs</option>
+                    <option value="Stationery">Stationery</option>
+                    <option value="Clothing">Clothing/Accessories</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <label>Location</label>
+                <select id="update-location">
+                    <option value="Engineering Block 1">Engineering Block 1</option>
+                    <option value="Engineering Block 3">Engineering Block 3</option>
+                    <option value="Medical College">Medical College</option>
+                    <option value="Dental College">Dental College</option>
+                    <option value="Central Library">Central Library</option>
+                    <option value="Cafeteria/Food Court">Cafeteria/Food Court</option>
+                    <option value="Hostel Area">Hostel Area</option>
+                    <option value="MCA & BCA Department">MCA & BCA Department</option>
+                    <option value="Pharmacy College">Pharmacy College</option>
+                    <option value="Agriculture Department">Agriculture Department</option>
+                    <option value="Law Department">Law Department</option>
+                    <option value="Admin Block">Admin Block</option>
+                    <option value="Other">Other Area</option>
+                </select>
+
+                <label>Description (Optional)</label>
+                <input type="text" id="update-description">
+
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 10px; border-left: 4px solid #4a65ff;">
+                    <p style="font-size: 0.85rem; color: #555; margin-bottom: 10px;"><b>Verification Required</b></p>
+                    <label>Confirm Email</label>
+                    <input type="email" id="update-email-confirm" placeholder="Your registered email">
+                    <label>4-Digit Security PIN</label>
+                    <input type="password" id="update-pin-confirm" placeholder="XXXX" maxlength="4">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeUpdateModal()">Cancel</button>
+                <button class="btn-save" onclick="saveUpdatedItem()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Script src corrected: removed space -->
+    <button onclick="topFunction()" id="backToTop" title="Go to top">↑</button>
+    <footer>
+        <p>&copy; 2026 Online Lost Item Tracking System - Maharishi Markandeswar University, Mullana | Stay Safe, Stay Found</p>
+    </footer>
+    <script src="script.js"></script>
+    <script>
+        // Start search initially when page loads
+        window.addEventListener('load', () => {
+             // Wait for script.js to load, then search
+             setTimeout(() => performSearch(), 100);
+        });
+    </script>
+</body>
+
+</html>

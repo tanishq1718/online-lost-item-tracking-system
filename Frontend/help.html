@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help / FAQ - OLITS</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand" style="display: flex; align-items: center;">
+            <img src="mmu_logo.png" alt="MMU Logo" style="height: 50px; margin-right: 15px; background: rgba(255, 255, 255, 0.9); padding: 5px; border-radius: 8px;">
+            <div style="color: white; font-weight: bold; font-size: 1.5rem;">OLITS</div>
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="help.html">Help/FAQ</a>
+            <div class="theme-switch-wrapper">
+                <label class="theme-switch" for="checkbox">
+                    <input type="checkbox" id="checkbox" />
+                    <div class="slider round"></div>
+                </label>
+            </div>
+        </div>
+    </nav>
+
+    <div class="form-box" style="max-width: 800px; text-align: left;">
+        <h2 style="text-align: center; color: #00d4ff;">📘 Campus Help & FAQ</h2>
+        <p style="text-align: center; margin-bottom: 30px;">Find answers to common questions and learn how to use the OLITS portal effectively.</p>
+
+        <h3>📝 Reporting Items</h3>
+        <p>1. <strong>Category & Location:</strong> If your item category or location isn't listed, select "Other" to provide specific details.<br>
+           2. <strong>Contact Information:</strong> Ensure your phone number is entered correctly with the proper country code for quick reachability.<br>
+           3. <strong>Security PIN:</strong> Always set a unique 4-digit PIN. This is required to manage your report and verify your identity during the handover process.</p>
+
+        <h3>🔍 Search & Filter</h3>
+        <p>Use the filters on the Dashboard to narrow down results by category, location, or date range. Items reported within the last 24 hours will be highlighted with a <span style="background:#ff4757; color:white; padding:2px 5px; border-radius:4px; font-size:0.7rem;">NEW</span> badge.</p>
+
+        <h3>🤝 The Handover Process</h3>
+        <p>If a match is found between a lost and found report, follow these steps to securely return the item:</p>
+        <div style="background: rgba(0,212,255,0.05); padding: 15px; border-radius: 10px; border-left: 4px solid #00d4ff; margin: 15px 0;">
+            <p>1. <strong>Handover:</strong> Finders MUST take the item to the <strong>Admin Office</strong> immediately for safe-keeping.<br>
+               2. <strong>Status Tracking:</strong> Once the Admin receives the item, its status will be updated to <strong>"Received by Admin"</strong>.<br>
+               3. <strong>Verification:</strong> Owners must visit the office and provide their <strong>Security PIN</strong> to claim their item.</p>
+        </div>
+
+        <h3>🚦 Understanding Statuses</h3>
+        <ul style="list-style: none; padding-left: 0; line-height: 2;">
+            <li>🟡 <span class="status-badge status-pending">Pending</span>: The system is searching for a matching report.</li>
+            <li>🟡 <span class="status-badge status-matched">Matched</span>: A potential match has been identified!</li>
+            <li>🔵 <span class="status-badge status-received">Received by Admin</span>: The item is securely held at the Admin Office.</li>
+            <li>🟢 <span class="status-badge status-verified">Verified & Claimed</span>: The item has been successfully returned to the owner. 🎉</li>
+            <li>🔴 <span class="status-badge status-rejected">Rejected / Spam</span>: The report was found to be invalid or fraudulent.</li>
+        </ul>
+
+
+        <h3>🛡️ Frequently Asked Questions</h3>
+        <div style="margin-top: 20px;">
+            <p><strong>Q: Why is the Security PIN important?</strong><br>
+            A: It serves as your proof of ownership. The system and the Admin office use it to ensure the item is returned to the correct person.</p>
+            
+            <p><strong>Q: I found an item, what are my responsibilities?</strong><br>
+            A: Report the item on the portal immediately and hand it over to the Admin office to ensure its safety and proper documentation.</p>
+
+            <p><strong>Q: What happens in case of false reporting?</strong><br>
+            A: Any attempt to file fake reports or claim items fraudulently is a serious violation and will lead to disciplinary action as per campus policy.</p>
+        </div>
+
+        <a href="dashboard.html" class="back-btn" style="width: 100%; text-align: center; margin-top: 30px; background: var(--btn-primary);">Back to Dashboard</a>
+    </div>
+
+
+
+    <button onclick="topFunction()" id="backToTop" title="Go to top">↑</button>
+
+    <footer>
+        <p>&copy; 2026 Online Lost Item Tracking System - Maharishi Markandeswar University, Mullana | Stay Safe, Stay Found</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

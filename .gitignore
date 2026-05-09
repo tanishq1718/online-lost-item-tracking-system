@@ -1,0 +1,9 @@
+node_modules/
+.env
+data/*.json
+!data/lost.json
+!data/found.json
+# Keep the files but ignore the data if preferred, 
+# or just ignore all json if you want fresh start on each deploy.
+# Render doesn't persist disk changes anyway unless using a Disk.
+# Since we use JSON files, data will be lost on redeploy without a Disk.

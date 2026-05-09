@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Lost Item - Online Lost Item Tracking System</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+    <style>
+        body {
+            font-family: 'Outfit', 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            transition: background 0.3s, color 0.3s;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <div class="navbar-brand" style="display: flex; align-items: center;">
+            <img src="mmu_logo.png" alt="MMU Logo"
+                style="height: 50px; margin-right: 15px; background: rgba(255, 255, 255, 0.9); padding: 5px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <div style="color: white; font-weight: bold;">OLITS <span style="font-weight: normal; font-size: 0.9rem; margin-left:10px;">Report Lost</span></div>
+        </div>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="help.html">Help/FAQ</a>
+            <div class="theme-switch-wrapper">
+                <label class="theme-switch" for="checkbox">
+                    <input type="checkbox" id="checkbox" />
+                    <div class="slider round"></div>
+                </label>
+            </div>
+            <a href="index.html" class="exit-btn" onclick="if(!confirm('Exit to home?')) return false;">🚪 Exit</a>
+        </div>
+    </div>
+
+    <div class="form-box">
+        <h2>📝 Report Lost Item</h2>
+        <p>Help us find your lost item! Please fill all details carefully.</p>
+
+        <form onsubmit="return false;">
+
+            <h3>📞 Contact Number</h3>
+            <input type="tel" id="phone" placeholder="☎️ Phone (Include country code, e.g. +91...)" required>
+
+            <h3>📧 Email Details</h3>
+            <input type="email" id="email" placeholder="📧 Email" required>
+
+            <h3>📦 Item Details</h3>
+
+            <input type="text" id="itemName" placeholder="Item Name (e.g., Wallet, Phone, Keys)" minlength="3"
+                maxlength="30" pattern=".*[a-zA-Z]+.*"
+                title="Must be 3-30 characters long and contain at least one letter." required>
+
+            <select id="category" required onchange="toggleOtherInput('category','otherCategoryGroup')">
+                <option value="" disabled selected>Select Category</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Documents">Documents/IDs</option>
+                <option value="Stationery">Stationery</option>
+                <option value="Clothing">Clothing/Accessories</option>
+                <option value="Other">Other (Specify below)</option>
+            </select>
+            <div id="otherCategoryGroup" style="display:none;">
+                <input type="text" id="otherCategory" placeholder="Enter custom category" style="border: 1px solid #4facfe;">
+            </div>
+
+            <select id="location" required onchange="toggleOtherInput('location','otherLocationGroup')">
+                <option value="" disabled selected>Select Last Seen Location</option>
+                <option value="Engineering Block 1">Engineering Block 1</option>
+                <option value="Engineering Block 3">Engineering Block 3</option>
+                <option value="Medical College">Medical College</option>
+                <option value="Dental College">Dental College</option>
+                <option value="Central Library">Central Library</option>
+                <option value="Cafeteria/Food Court">Cafeteria/Food Court</option>
+                <option value="Hostel Area">Hostel Area</option>
+                <option value="MCA & BCA Department">MCA & BCA Department</option>
+                <option value="Pharmacy College">Pharmacy College</option>
+                <option value="Agriculture Department">Agriculture Department</option>
+                <option value="Law Department">Law Department</option>
+                <option value="Admin Block">Admin Block</option>
+                <option value="Other">Other (Specify below)</option>
+            </select>
+            <div id="otherLocationGroup" style="display:none;">
+                <input type="text" id="otherLocation" placeholder="Enter custom location" style="border: 1px solid #4facfe;">
+            </div>
+
+            <!-- DATE -->
+            <label for="date">📅 Date Lost</label>
+            <input type="date" id="date" required>
+
+            <!-- TIME -->
+            <label for="time">🕐 Time Lost</label>
+            <input type="time" id="time" required>
+
+            <label for="description">📄 Description</label>
+            <textarea id="description" placeholder="Describe your item (color, brand, special features...)"
+                maxlength="150"></textarea>
+            <div id="char-count" class="char-counter">0/150 characters</div>
+
+            <h3>🔒 Security PIN</h3>
+            <p style="font-size: 0.8rem; color: #888; margin-bottom: 10px;">Set a 4-digit PIN to edit or delete this
+                report later.</p>
+            <div class="pin-container">
+                <input type="password" id="pin" placeholder="Set 4-Digit PIN (e.g. 1234)" maxlength="4" pattern="\d{4}" required style="border: 2px solid #00d4ff; background: rgba(0,212,255,0.05);">
+                <button type="button" class="pin-toggle" onclick="togglePinVisibility('pin')">👁️</button>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 10px; margin: 20px auto; width: 95%; text-align: left;">
+                <input type="checkbox" id="terms" style="width: 20px; height: 20px; margin: 0; cursor: pointer;">
+                <label for="terms" style="margin: 0; font-size: 0.85rem; color: #555;">I agree to the <a href="javascript:void(0)" onclick="openTermsModal()" style="color: #4facfe; text-decoration: underline;">Terms & Conditions</a> and verify my identity during recovery.</label>
+            </div>
+
+            <button type="button" onclick="submitLostItemForm(event)">✅ Submit Report</button>
+        </form>
+    </div>
+
+    <script>
+        // populate current date and time when the page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            const dateInput = document.getElementById('date');
+            const timeInput = document.getElementById('time');
+            if (dateInput) {
+                const today = new Date();
+                const yyyy = today.getFullYear();
+                const mm = String(today.getMonth() + 1).padStart(2, '0');
+                const dd = String(today.getDate()).padStart(2, '0');
+                dateInput.value = `${yyyy}-${mm}-${dd}`;
+            }
+            if (timeInput) {
+                const now = new Date();
+                const hh = String(now.getHours()).padStart(2, '0');
+                const mi = String(now.getMinutes()).padStart(2, '0');
+                timeInput.value = `${hh}:${mi}`;
+            }
+        });
+
+        // Form validation logic was moved to script.js
+    </script>
+    <button onclick="topFunction()" id="backToTop" title="Go to top">↑</button>
+    <footer>
+        <p>&copy; 2026 Online Lost Item Tracking System - Maharishi Markandeswar University, Mullana | Stay Safe, Stay Found</p>
+    </footer>
+    <script src="script.js"></script>
+    <script>
+        // Initialize intl-tel-input
+        const phoneInput = document.querySelector("#phone");
+        const iti = window.intlTelInput(phoneInput, {
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+            initialCountry: "in",
+            separateDialCode: true,
+            preferredCountries: ["in", "us", "gb"]
+        });
+
+        // Attach iti instance to window so script.js can access it
+        window.itiLost = iti;
+    </script>
+</body>
+
+</html>

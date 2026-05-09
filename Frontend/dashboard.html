@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Lost Item Tracking System - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
+        }
+
+
+        /* Navigation Bar */
+        .navbar {
+            background: var(--navbar-bg);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar-brand {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .navbar-brand span {
+            color: #00d4ff;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.6rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: #00d4ff;
+            color: #1a1a2e;
+        }
+
+        .exit-btn {
+            background: #ff4757;
+            cursor: pointer;
+        }
+
+        .exit-btn:hover {
+            background: #ff3838;
+            color: white;
+        }
+
+        /* Dashboard Container */
+        .dashboard-container {
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .dashboard-header {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 3rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .dashboard-header h1 {
+            color: var(--text-color);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-header p {
+            color: var(--secondary-text);
+            font-size: 1.1rem;
+        }
+
+        /* Menu Grid */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .menu-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text-color);
+        }
+
+        .menu-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 35px rgba(102, 126, 234, 0.3);
+        }
+
+        .menu-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .menu-card h2 {
+            color: var(--text-color);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-card p {
+            color: var(--secondary-text);
+            font-size: 0.95rem;
+        }
+
+        .menu-card .btn-link {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.8rem 1.5rem;
+            background: var(--btn-primary);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .menu-card:hover .btn-link {
+            background: #5a67d8;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <div class="navbar-brand" style="display: flex; align-items: center;">
+            <img src="mmu_logo.png" alt="MMU Logo"
+                style="height: 50px; margin-right: 15px; background: rgba(255, 255, 255, 0.9); padding: 5px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <div style="color: white;">OLITS</div>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="help.html">Help/FAQ</a>
+            <div class="theme-switch-wrapper">
+                <label class="theme-switch" for="checkbox">
+                    <input type="checkbox" id="checkbox" />
+                    <div class="slider round"></div>
+                </label>
+            </div>
+            <a href="#" class="exit-btn" onclick="exitApplication()">🚪 Exit</a>
+        </div>
+    </div>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1>📌 Dashboard</h1>
+            <p>Welcome to Online Lost Item Tracking System - Manage Lost & Found Items</p>
+        </div>
+
+        <div class="menu-grid">
+            <!-- ... existing cards ... -->
+            <!-- Report Lost Item Card -->
+            <a href="report_lost.html" class="menu-card">
+                <div class="menu-icon">📋</div>
+                <h2>Report Lost Item</h2>
+                <p>Report an item you've lost on campus and help us find it for you.</p>
+                <div class="btn-link">Go to Form →</div>
+            </a>
+
+            <!-- Report Found Item Card -->
+            <a href="report_found.html" class="menu-card">
+                <div class="menu-icon">✅</div>
+                <h2>Report Found Item</h2>
+                <p>Report an item you've found on campus to help its owner locate it.</p>
+                <div class="btn-link">Go to Form →</div>
+            </a>
+
+            <!-- View Items Card -->
+            <a href="view.html" class="menu-card">
+                <div class="menu-icon">🔍</div>
+                <h2>View Items</h2>
+                <p>Browse our database of lost and found items on campus.</p>
+                <div class="btn-link">View Items →</div>
+            </a>
+
+            <!-- Admin Panel Card -->
+            <a href="javascript:void(0)" onclick="checkAdminAccess()" class="menu-card"
+                style="border: 2px solid #ff4757;">
+                <div class="menu-icon">🛡️</div>
+                <h2>Admin Control Panel</h2>
+                <p>Verify item ownership and update item statuses across the system.</p>
+                <div class="btn-link" style="background:#ff4757;">Admin Access →</div>
+            </a>
+        </div>
+
+        <div class="recent-activity" style="margin-top: 40px; background: var(--form-bg); padding: 30px; border-radius: var(--border-radius); box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            <h2 style="margin-top: 0; color: var(--text-color);">🕒 Recent Activity</h2>
+            <div id="recent-items-container">
+                <div class="skeleton-container">
+                    <div class="skeleton-card shimmer" style="height: 100px;"></div>
+                    <div class="skeleton-card shimmer" style="height: 100px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 Online Lost Item Tracking System - Maharishi Markandeswar University, Mullana | Stay Safe,
+                Stay Found</p>
+        </footer>
+    </div>
+
+    <script>
+        function exitApplication() {
+            if (confirm('Are you sure you want to exit? You will be redirected to the home page.')) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        function checkAdminAccess() {
+            const password = prompt("🚨 Admin Authentication Required\n\nThis panel is restricted to Campus Authorities only.\n\nPlease enter the master password to proceed:");
+            // Set password to "mmuadmin123" for example
+            if (password === "mmuadmin123") {
+                sessionStorage.setItem("adminLoggedIn", "true");
+                window.location.href = "admin.html";
+            } else if (password !== null) {
+                alert("❌ Incorrect password. Access denied.");
+            }
+        }
+    </script>
+
+    <button onclick="topFunction()" id="backToTop" title="Go to top">↑</button>
+    <script src="script.js"></script>
+</body>
+
+</html>

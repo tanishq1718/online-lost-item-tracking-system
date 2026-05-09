@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - OLITS</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Outfit', 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .navbar {
+            background: #111;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #ff4757;
+        }
+
+        .navbar-brand {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand span {
+            color: #ff4757;
+            margin-left: 5px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            background: #444;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover {
+            background: #666;
+        }
+
+        .main {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .admin-header {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .admin-header h2 {
+            margin: 0;
+            color: var(--text-color);
+        }
+
+        table {
+            width: 100%;
+            background: var(--card-bg);
+            border-collapse: collapse;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            margin-bottom: 40px;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f9f9f9;
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #ffeaa7;
+            color: #d63031;
+        }
+
+        .status-verified {
+            background: #55efc4;
+            color: #00b894;
+        }
+
+        .status-claimed {
+            background: #74b9ff;
+            color: #0984e3;
+        }
+
+        .manage-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .manage-btn:hover {
+            background: #ff3838;
+        }
+
+        /* --- SPRINT 3 HEAT MAP STYLES --- */
+        .analytics-section {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            margin-top: 40px;
+        }
+
+        .analytics-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-color);
+            margin-bottom: 10px;
+        }
+
+        .analytics-subtitle {
+            text-align: center;
+            color: var(--secondary-text);
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+        }
+
+        .map-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+        }
+
+        .legend {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+            font-size: 0.85rem;
+            color: #555;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            width: 90%;
+            max-width: 500px;
+            margin: 100px auto;
+            padding: 25px;
+            border-radius: 10px;
+            position: relative;
+            color: var(--text-color);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .modal-body {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .modal-body select,
+        .modal-body input {
+            padding: 10px;
+            border: 1px solid var(--input-border);
+            background: var(--bg-color);
+            color: var(--text-color);
+            border-radius: 5px;
+            width: 100%;
+            font-size: 1rem;
+        }
+
+        .action-btn {
+            background: #2ed573;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="navbar">
+        <div class="navbar-brand">
+            <img src="mmu_logo.png" alt="Logo"
+                style="height: 40px; margin-right: 15px; background: white; padding: 2px; border-radius: 4px;">
+            <div style="color: white; font-weight: bold;">OLITS <span style="font-weight: normal; font-size: 0.9rem; margin-left:10px;">Admin Console</span></div>
+        </div>
+        <div class="nav-links">
+            <div class="theme-switch-wrapper">
+                <label class="theme-switch" for="checkbox">
+                    <input type="checkbox" id="checkbox" />
+                    <div class="slider round"></div>
+                </label>
+            </div>
+            <a href="javascript:void(0)" onclick="logoutAdmin()">Return to Dashboard</a>
+        </div>
+    </div>
+
+    <div class="main">
+        <!-- Sprint 2 Section -->
+        <div class="admin-header">
+            <h2>🛡️ System Administration</h2>
+            <p>Manage and verify all reported items within the campus network.</p>
+            <div style="margin-top: 15px; display: flex; justify-content: center; gap: 10px; align-items: center;">
+                <button onclick="loadAdminItems(); if(typeof loadAdminStats === 'function') loadAdminStats();" style="padding: 8px 15px; cursor: pointer; border-radius: 5px; background: var(--btn-primary); color: white; border: none;">🔄 Refresh Dashboard</button>
+                <select id="adminSort" onchange="loadAdminItems()" style="padding: 8px; border-radius: 5px; border: 1px solid var(--input-border); background: var(--bg-color); color: var(--text-color);">
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="name">Name (A-Z)</option>
+                </select>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Item Name</th>
+                    <th>Reported By (Email)</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="admin-table-body">
+                <tr>
+                    <td colspan="5" style="text-align: center;">Loading data...</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Sprint 3 Section: Heat Map -->
+        <div class="analytics-section">
+            <div class="analytics-title">📍 Campus Lost Item Heat Map</div>
+            <div class="analytics-subtitle">Real-time tracking of high-risk zones across MMU Campus</div>
+
+            <div id="map-grid" class="map-grid">
+                <!-- Dynamically loaded by script.js -->
+            </div>
+
+            <div class="legend">
+                <div class="legend-item"><span class="dot" style="background:#f1f2f6; border:1px solid #ddd;"></span>
+                    Zero</div>
+                <div class="legend-item"><span class="dot" style="background:#fff9db;"></span> Low (1-2)</div>
+                <div class="legend-item"><span class="dot" style="background:#ffec99;"></span> Med (3-5)</div>
+                <div class="legend-item"><span class="dot" style="background:#ffc078;"></span> High (6-10)</div>
+                <div class="legend-item"><span class="dot" style="background:#ff8787;"></span> Critical (10+)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Management Modal -->
+    <div id="manageModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()" style="color: var(--secondary-text);">&times;</span>
+            <h3 style="margin-top:0; color: var(--text-color);">Update Item Status</h3>
+            <div id="modal-item-info" style="margin-bottom: 15px; font-size: 0.9rem; color: var(--secondary-text);"></div>
+
+            <div class="modal-body">
+                <input type="hidden" id="modal-item-id">
+                <input type="hidden" id="modal-item-type">
+
+                <label for="newStatus"><strong>New Status</strong></label>
+                <select id="newStatus">
+                    <option value="Pending">Pending</option>
+                    <option value="Matched">Matched</option>
+                    <option value="Received by Admin">Received by Admin</option>
+                    <option value="Verified & Claimed">Verified & Claimed</option>
+                    <option value="Rejected">Rejected/Spam</option>
+                </select>
+
+                <button class="action-btn" onclick="saveStatusUpdate()">Save Update</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Online Lost Item Tracking System - Maharishi Markandeswar University, Mullana | Stay Safe, Stay Found</p>
+    </footer>
+    <!-- Important: script.js linked first to provide loadAdminStats() -->
+    <script src="script.js"></script>
+    <script>
+        // Security Check: Redirect if not authenticated via Dashboard
+        if (sessionStorage.getItem("adminLoggedIn") !== "true") {
+            alert("❌ Unauthorized Access!\n\nPlease login through the Dashboard.");
+            window.location.href = "dashboard.html";
+        }
+
+        const adminApiUrl = '/api';
+
+        function loadAdminItems() {
+            const tbody = document.getElementById('admin-table-body');
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Loading...</td></tr>';
+
+            fetch(adminApiUrl + '/search')
+                .then(r => r.json())
+                .then(res => {
+                    if (res.results && res.results.length > 0) {
+                        let html = '';
+                        const sorted = res.results.sort((a, b) => (b.id || '0').localeCompare(a.id || '0'));
+
+                        sorted.forEach(item => {
+                            const badgeColor = item.type === 'found' ? 'background:#2ed573;color:white;' : 'background:#ff4757;color:white;';
+                            const badgeHtml = `<span style="padding:4px 8px; border-radius:12px; font-size:0.8rem; ${badgeColor}">${item.type.toUpperCase()}</span>`;
+
+                            let statusClass = 'status-pending';
+                            if (item.status === 'Matched') statusClass = 'status-matched';
+                            else if (item.status === 'Received by Admin') statusClass = 'status-received';
+                            else if (item.status === 'Verified & Claimed') statusClass = 'status-verified';
+                            else if (item.status === 'Rejected') statusClass = 'status-pending';
+
+                            html += `
+                                <tr>
+                                    <td>${badgeHtml}</td>
+                                    <td><strong>${item.itemName}</strong><br><small>${item.category}</small></td>
+                                    <td>${item.email}</td>
+                                    <td><span class="status-badge ${statusClass}">${item.status || 'Pending'}</span></td>
+                                    <td>
+                                        <button class="manage-btn" onclick='openModal(${JSON.stringify(item)})'>Manage</button>
+                                    </td>
+                                </tr>
+                            `;
+                        });
+                        tbody.innerHTML = html;
+                    } else {
+                        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">No items found.</td></tr>';
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: red;">Error loading data.</td></tr>';
+                });
+        }
+
+        // Modal Logic
+        function openModal(item) {
+            if (!item.id) {
+                alert("Cannot manage item because it lacks an ID. (Old data)");
+                return;
+            }
+            document.getElementById('modal-item-id').value = item.id;
+            document.getElementById('modal-item-type').value = item.type;
+
+            document.getElementById('modal-item-info').innerHTML = `Updating: <strong>${item.itemName}</strong> (${item.email})`;
+            document.getElementById('newStatus').value = item.status || 'Pending';
+
+            document.getElementById('manageModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('manageModal').style.display = 'none';
+        }
+
+        function saveStatusUpdate() {
+            const id = document.getElementById('modal-item-id').value;
+            const type = document.getElementById('modal-item-type').value;
+            const status = document.getElementById('newStatus').value;
+
+            fetch(`${adminApiUrl}/items/${type}/${id}/status`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: status })
+            })
+                .then(r => r.json())
+                .then(res => {
+                    if (res.success) {
+                        alert('Status updated securely.');
+                        closeModal();
+                        loadAdminItems();
+                        // Also refresh heat map if something was resolved
+                        if (typeof loadAdminStats === 'function') loadAdminStats();
+                    } else {
+                        alert('Error: ' + res.message);
+                    }
+                })
+                .catch(err => alert('Network error.'));
+        }
+
+        function logoutAdmin() {
+            sessionStorage.removeItem("adminLoggedIn");
+            window.location.href = "dashboard.html";
+        }
+
+        // Integrated Initialization
+        window.onload = () => {
+            loadAdminItems(); // Sprint 2 Table
+            if (typeof loadAdminStats === 'function') {
+                loadAdminStats(); // Sprint 3 Heat Map (from script.js)
+            }
+        };
+    </script>
+    <button onclick="topFunction()" id="backToTop" title="Go to top">↑</button>
+</body>
+
+</html>
