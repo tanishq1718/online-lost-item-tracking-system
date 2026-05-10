@@ -12,14 +12,15 @@ A premium, full-stack web application designed for campus environments (like MMU
 ## 🚀 Tech Stack
 - **Frontend:** HTML5, CSS3 (Vanilla), JavaScript (ES6+)
 - **Backend:** Node.js, Express.js
-- **Database:** JSON-based local storage
+- **Database:** MariaDB (Relational Database)
 - **Deployment:** Render (Live Server)
 
 ## 🛠️ Local Setup
 1. Clone the repository.
 2. Run `npm install` to install dependencies.
-3. Run `npm start` to launch the server.
-4. Open `http://localhost:5000` in your browser.
+3. Setup your MariaDB database and configure the credentials in the `.env` file.
+4. Run `npm start` to launch the server.
+5. Open `http://localhost:5000` in your browser.
 
 ---
 *Stay Safe, Stay Found!*
